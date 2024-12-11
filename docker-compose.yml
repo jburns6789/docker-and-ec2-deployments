@@ -6,8 +6,12 @@ services:
       context: .
       dockerfile: Flask.Dockerfile
     container_name: flask-container
+    expose:
+      - "5005"
     ports:
       - "5005:5005"
+    networks:
+      - app-network
 
   nginx:
     build:
@@ -18,5 +22,11 @@ services:
       - "80:80"
     depends_on:
       - flask_website
+    networks:
+      - app-network
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
+networks:
+  app-network:
+    driver: bridge
